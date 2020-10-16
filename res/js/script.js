@@ -1,7 +1,6 @@
 let courses = null;
 
 $(function () {
-
     $('.pill').click(function () {
         switchTab($(this).attr('data-target'))
     });
@@ -10,59 +9,65 @@ $(function () {
         $("#add-course").toggle();
     });
 
-
-    $("#save-course").click(function () {
+    // notice async keyword here
+    $("#save-course").click(async function () {
         const course = {
             grade: $("#grade").val(),
             title: $("#title").val(),
             semester: $("#semester").val(),
         };
-        saveCourseRequest(course)
-            .then(function (saveCourseResponse) {
-                console.log("Save Course response: ", saveCourseResponse);
-                saveCourse(course);
-            })
-            .catch(function () {
-                alert('Error saving course')
-            });
+        // use await to wait for an async function to complete
+        const updatedCourses = await saveCourseRequest(course)
+        console.log("Save Course response: ", updatedCourses);
+        saveCourse(course);
     });
 
 
     $("#cancel-course").click(function () {
         resetSaveCourseForm();
     });
-
-
-    loadUserInfo()
-        .then(function (user) {
-            displayUserInfo(user)
-        })
-        .catch(function () {
-            alert('Error loading user info')
-        });
-
-
-    loadCourses()
-        .then(function (coursesResponse) {
-            console.log("Courses response: ", coursesResponse)
-            courses = coursesResponse;
-            displayCourses(courses);
-            updateGpa();
-        })
-        .catch(function () {
-            alert('Error loading user info')
-        });
-
-
-    function saveCourse(course) {
-        courses.push(course);
-        addCourseToTable(course);
-        updateGpa();
-        resetSaveCourseForm();
-    }
-
 });
 
+// await keyword works only within async functions,
+// an anonymous async function is used here that is also invoked immediately
+(async () => {
+    const user = await loadUserInfo()
+    displayUserInfo(user)
+
+    courses = await loadCourses()
+    console.log("Courses: ", courses)
+    displayCourses(courses);
+    updateGpa();
+})();
+
+// async keyword to mark a function as asynchronous
+async function loadUserInfo() {
+    const userResponse = await fetch('https://wad20-lab7.herokuapp.com/user');
+    return await userResponse.json();
+}
+
+async function saveCourseRequest(course) {
+    const saveCourseResponse = await fetch('https://wad20-lab7.herokuapp.com/courses/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(course),
+    });
+    return await saveCourseResponse.json();
+}
+
+async function loadCourses() {
+    const coursesResponse = await fetch('https://wad20-lab7.herokuapp.com/courses');
+    return await coursesResponse.json();
+}
+
+function saveCourse(course) {
+    courses.push(course);
+    addCourseToTable(course);
+    updateGpa();
+    resetSaveCourseForm();
+}
 
 function updateGpa() {
     const gpa = calculateGpa();
@@ -124,49 +129,6 @@ function displayCourses(courses) {
             </tr>
         `);
     }
-}
-
-function loadUserInfo() {
-    return $.get(
-        {
-            url: 'https://wad20-lab7.herokuapp.com/user',
-            success: function (response) {
-                return response;
-            },
-            error: function () {
-                alert('error')
-            }
-        }
-    );
-}
-
-function saveCourseRequest(course) {
-    return $.post(
-        {
-            url: 'https://wad20-lab7.herokuapp.com/courses/add',
-            data: course,
-            success: function (response) {
-                return response;
-            },
-            error: function () {
-                alert('error')
-            }
-        }
-    );
-}
-
-function loadCourses() {
-    return $.get(
-        {
-            url: 'https://wad20-lab7.herokuapp.com/courses',
-            success: function (response) {
-                return response;
-            },
-            error: function () {
-                alert('error')
-            }
-        }
-    );
 }
 
 function switchTab(id) {
