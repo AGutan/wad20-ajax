@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="res/images/favicon.ico">
+    <link rel="stylesheet" href="res/css/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Livvic&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="res/js/User.js"></script>
+    <script src="res/js/script.js"></script>
+    <title>My Dashboard</title>
+</head>
+<body>
+<main>
+    <header>
+        <strong>Welcome to your dashboard!</strong>
+    </header>
+    <section id="container">
+        <section id="main">
+            <div class="content">
+                <div id="profile-container" class="tab active">
+                    <div id="profile">
+                        <div class="avatar">
+                            <img src="res/images/me.png" id="picture" alt="My picture">
+                        </div>
+                        <div class="info">
+                            <ul>
+                                <li id="name"></li>
+                                <li id="birthdate"></li>
+                                <li id="faculty"></li>
+                            </ul>
+                        </div>
+                        <div id="gpa">
+                            <strong>0</strong>
+                        </div>
+                        <div class="clear-fix"></div>
+                    </div>
+                </div>
+                <div id="courses-container" class="tab">
+                    <h1 class="title">Courses</h1>
+                    <table id="courses">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Course Title</th>
+                            <th>Semester</th>
+                            <th>Grade</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <br>
+                    <br>
+                    <div>
+                        <button id="add-course-button" class="blue-button">+</button>
+                        <span id="add-course">
+                            <input class="input" type="text" placeholder="Course title" id="title">
+                            <input class="input" type="number" min="1" max="8" placeholder="Semester" id="semester">
+                            <input class="input" type="number" min="0" max="100" placeholder="Grade" id="grade">
+                            <button class="green-button" id="save-course">Save</button>
+                            <button class="grey-button" id="cancel-course">Cancel</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="controls">
+                <button id="profile-button" data-target="profile-container" class="pill active">Profile</button>
+                <button id="courses-button" data-target="courses-container" class="pill">Courses</button>
+            </div>
+        </section>
+    </section>
+    <footer>
+        <ul class="links">
+            <li>
+                <a href="https://ois2.ut.ee/" target="_blank">OIS</a>
+            </li>
+            <li>
+                <a href="https://courses.cs.ut.ee/" target="_blank">Courses</a>
+            </li>
+        </ul>
+    </footer>
+</main>
+
+</body>
+</html>
